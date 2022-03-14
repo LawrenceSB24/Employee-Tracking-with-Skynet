@@ -1,0 +1,19 @@
+{
+  "name": "employee-tracking-with-skynet",
+  "version": "1.0.0",
+  "description": "Command-line application that manages company's employee database using Node.js, Inquirer, and MySQL",
+  "main": "server.js",
+  "scripts": {
+      "test": "echo \"Error: No test specified\" && exit 1",
+      "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "express": "^4.17.3",
+    "inquirer": "^8.2.1",
+    "mysql2": "^2.3.3"
+  }
+}
