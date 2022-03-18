@@ -17,8 +17,7 @@ const db = mysql.createConnection(
         host: "localhost",
         user: "root",
         password: "password",
-        database: "employee_db",
-        port: PORT
+        database: "employee_db"
     },
     console.log("Connection is a go!")
 );
