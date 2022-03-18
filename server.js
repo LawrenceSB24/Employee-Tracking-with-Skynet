@@ -1,6 +1,3 @@
-// Express package imported
-const express = require('express');
-
 // mysql2 package imported
 const mysql = require('mysql2');
 
