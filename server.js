@@ -10,8 +10,8 @@ const inquirer = require('inquirer');
 // console.table package imported
 require('console.table');
 
-// // Local port for Heroku uploading
-// const PORT = process.env.PORT || 3001;
+// Local port for Heroku uploading
+const PORT = process.env.PORT || 3001;
 
 // Initializing express
 const app = express();
@@ -26,7 +26,8 @@ const db = mysql.createConnection(
         host: "localhost",
         user: "root",
         password: "password",
-        database: "employee_db"
+        database: "employee_db",
+        port: PORT
     },
     console.log("Connection is a go!")
 );
