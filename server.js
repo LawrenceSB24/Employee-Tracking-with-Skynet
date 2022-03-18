@@ -13,12 +13,12 @@ require('console.table');
 // Local port for Heroku uploading
 const PORT = process.env.PORT || 3001;
 
-// Initializing express
-const app = express();
+// // Initializing express
+// const app = express();
 
-// Middleware for urlencoded and JSON data
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+// // Middleware for urlencoded and JSON data
+// app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
 
 // Connection to database
 const db = mysql.createConnection(
