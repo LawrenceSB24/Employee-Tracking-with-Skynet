@@ -58,7 +58,7 @@ THEN I am prompted to enter the following for the employee:
 > - Manager employee reports to
 and that employee is added into the database
 
-WHEN I choose to update an employee rolle
+WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and information is updated to the database
 ```
 
@@ -91,3 +91,18 @@ Schema.sql file should contain the following tables
 
 > - Constructor function or class can be helpful in organizing functions
 > - A seeds-sql file can be used to pre-populate the database. This will make development of individual features much easier
+
+## Usage
+
+To run this application you will need to first download three packages:
+> 1. Inquirer to allow users interaction with the command line
+> 2. MySQL2 to run MySQL in the console
+> 3. console.table to show the tables within the database onto the console
+
+Next, follow these steps to launch MySQL in the command line
+> 1. Type `mysql -u root -p` to login to MySQL
+
+> 2. Next, type in `show databases`. This will allow you to seek out the database you want to access
+
+> 3. Type in `USE database_name` (In this case it will be employee_db) so you can start using this database
+
