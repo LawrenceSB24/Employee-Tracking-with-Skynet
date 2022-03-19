@@ -17,12 +17,6 @@ const db = mysql.createConnection(
         database: "employee_db"
     }
 );
-
-db.connect(function (err) {
-    if (err) throw err;
-    console.log('Connection has been established!');
-});
-
 // Query function for listing all known departments
 // Listing roles and employee functions will have similar layout
 
