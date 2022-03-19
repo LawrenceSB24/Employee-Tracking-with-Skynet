@@ -38,4 +38,4 @@ LEFT JOIN company_role ON employee.role_id = company_role.id
 LEFT JOIN department ON company_role.department_id = department_id
 
 -- Query for selecting managers based on their id
-LEFT JOIN employee manage ON employee.manager_id = manager;
+LEFT JOIN employee manage ON employee.manager_id = manager.id;
