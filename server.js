@@ -18,9 +18,9 @@ const db = mysql.createConnection(
     },
     console.log('Connection established!')
 );
+
 // Query function for listing all known departments
 // Listing roles and employee functions will have similar layout
-
 function selectDep() {
     db.promise().query('SELECT * FROM department')
         .then(([data]) => {
@@ -30,7 +30,6 @@ function selectDep() {
 };
 
 // Query function for listing all known roles
-
 function selectRole() {
     db.promise().query('SELECT * FROM company_role')
         .then(([data]) => {
@@ -211,17 +210,70 @@ function empRoleUpdate() {
                 });
         });
 };
-// TODO: Deleting A Department
 
-// TODO: Updating A Department
+// TODO (Ice-box): Deleting A Department
+/**
+ * function delDept() {
+ * 
+ * }
+ * 
+*/
 
-// TODO: Deleting A Role
+// TODO (Ice-box): Updating A Department
+/**
+ * function updateDept() {
+ * 
+ * }
+ * 
+*/
 
-// TODO: Updating A Role
+// TODO (Ice-box): Deleting A Role
+/**
+ * function delRole() {
+ * 
+ * }
+ * 
+*/
 
-// TODO: Deleting A Employee
+// TODO (Ice-box): Updating A Role
+/**
+ * function updateRole() {
+ * 
+ * }
+ * 
+*/
 
-// TODO: Updating A Employee
+// TODO (Ice-box): Deleting A Employee
+/**
+ * function delEmp() {
+ * 
+ * }
+ * 
+*/
+
+// TODO (Ice-box): Updating A Employee
+/**
+ * function updateEmp() {
+ * 
+ * }
+ * 
+*/
+
+// TODO (Ice Box): Viewing Employee Under A Department
+/**
+ * function empByDept() {
+ * 
+ * }
+ * 
+*/
+
+// TODO (Ice Box): Viewing Employee Under A Manager
+/**
+ * function empByManager() {
+ * 
+ * }
+ * 
+*/
 
 
 // Inquirer prompts for updating the list
@@ -233,15 +285,10 @@ function viewTab() {
                 'View Departments',
                 'View Roles',
                 'View All Employees',
-                'View Employees by Department',
-                'View Employees by Manager',
                 'Add Department',
                 'Add Role',
                 'Add Employee',
                 'Update Employee Role',
-                'Delete Department', 'Update Department',
-                'Delete Role', 'Update Role',
-                'Delete Employee', 'Update Employee',
                 'Done'
             ],
             name: 'menu'
@@ -258,12 +305,6 @@ function viewTab() {
                 case 'View All Employees':
                     selectEmps();
                     break;
-                case 'View Employees by Department':
-                    empsDept();
-                    break;
-                case 'View Employees by Manager':
-                    empsMana();
-                    break;
                 case 'Add Department':
                     deptAdd();
                     break;
@@ -275,24 +316,6 @@ function viewTab() {
                     break;
                 case 'Update Employee Role':
                     empRoleUpdate();
-                    break;
-                case 'Delete Department':
-                    deptDel();
-                    break;
-                case 'Update Department':
-                    deptUpdate();
-                    break;
-                case 'Delete Role':
-                    roleDel();
-                    break;
-                case 'Update Role':
-                    roleUpdate();
-                    break;
-                case 'Delete Employee':
-                    empDel();
-                    break;
-                case 'Update Employee':
-                    empUp();
                     break;
                 case 'Done':
                     return;
