@@ -13,44 +13,42 @@ const db = mysql.createConnection(
     {
         host: "localhost",
         user: "root",
-        password: "password",
+        password: "",
         database: "employee_db"
-    },
-    console.log("Connection is a go!")
+    }
 );
 
-// TODO: Listing departments
 // Query function for listing all known departments
 // Listing roles and employee functions will have similar layout
 
 function selectDep() {
-    db.query('SELECT * FROM department')
+    db.promise().query('SELECT * FROM department')
         .then(([data]) => {
             console.table(data);
             viewTab();
         });
 };
 
-// TODO: Listing roles
+// Query function for listing all known roles
 
 function selectRole() {
-    db.query('SELECT * FROM company_role')
+    db.promise().query('SELECT * FROM company_role')
         .then(([data]) => {
             console.table(data);
             viewTab();
         });
 };
 
-// TODO: Listing employees
+// Query function for listing all known employees
 function selectEmps() {
-    db.query('SELECT * FROM employee')
+    db.promise().query('SELECT * FROM employee')
         .then(([data]) => {
             console.table(data);
             viewTab();
         });
 };
 
-// TODO: Adding a new department
+// Query function for adding a new department
 function deptAdd() {
     inquirer
         .prompt([
@@ -62,7 +60,7 @@ function deptAdd() {
         ])
         .then(res => {
             let deptNew = res.dept_name;
-            db.query('INSERT INTO department(name) WHERE values = ?', [deptNew])
+            db.promise().query('INSERT INTO department(name) WHERE values = ?', [deptNew])
                 .then(([data]) => {
                     selectDep();
                     console.table(data);
@@ -71,7 +69,7 @@ function deptAdd() {
         });
 };
 
-// TODO: Adding new role
+// Query function for adding a new role
 function roleAdd() {
     inquirer
         .prompt([
@@ -91,7 +89,7 @@ function roleAdd() {
             let roleSalary = res.role_salary;
             let departmentId;
 
-            db.query('SELECT * FROM department')
+            db.promise().query('SELECT * FROM department')
                 .then(([data]) => {
                     const depts = data.map(({ id, title }) => ({
                         name: title,
@@ -120,8 +118,7 @@ function roleAdd() {
         });
 };
 
-// TODO: Adding new employee
-
+// Query function for adding a new employee
 function addEmp() {
     inquirer
         .prompt([
@@ -143,7 +140,7 @@ function addEmp() {
             let roleID;
             let managerID;
 
-            db.query('SELECT * FROM company_role')
+            db.promise().query('SELECT * FROM company_role')
                 .then(([data]) => {
                     const roles = data.map(({ id, title }) => ({
                         name: title,
@@ -180,9 +177,9 @@ function addEmp() {
         });
 }
 
-// TODO: Updating new employee role
+// Query function for updating new role for an employee
 function empRoleUpdate() {
-    db.query('SELECT (employee.first_name, employee.last_name, employee.role_id) FROM employee', [roleID])
+    db.promise().query('SELECT (employee.first_name, employee.last_name, employee.role_id) FROM employee', [roleID])
         .then(([data]) => {
             inquirer
                 .prompt([
@@ -206,11 +203,11 @@ function empRoleUpdate() {
                 .then(res => {
                     let newRoleID = res.newRoleID;
                     db.query('INSERT INTO employee(roleID) WHERE values = ?', [empFirst, empLast, newRoleID, managerID])
-                    .then(([data]) => {
-                        selectRole();
-                        console.table(data);
-                        viewTab();
-                    });
+                        .then(([data]) => {
+                            selectRole();
+                            console.table(data);
+                            viewTab();
+                        });
                 });
         });
 };
