@@ -258,11 +258,7 @@ function empRoleUpdate() {
                         ])
                         .then(res => {
                             title = res.role_id;
-                            console.log(emps);
-                            console.log(roles);
-                            console.log(title);
-                            console.log(empId);
-                            db.promise().query(`UPDATE employee SET role_id = ${title} WHERE id = ${empId}`)
+                            db.promise().query(`UPDATE employee SET role_id = ? WHERE id = ?`)
                             viewTab();
                         })
                 })
