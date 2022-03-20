@@ -110,7 +110,6 @@ function deptAdd() {
             let deptNew = res.dept_name;
             db.promise().query('INSERT INTO department(name) values (?)', [deptNew])
                 .then(([data]) => {
-                    selectDep();
                     viewTab();
                 });
         });
@@ -156,7 +155,6 @@ function roleAdd() {
                             departmentId = res.deptId
                             db.promise().query('INSERT INTO company_role (title, salary, department_id) values (?, ?, ?)', [roleNewName, roleSalary, departmentId])
                                 .then(([data]) => {
-                                    selectRole();
                                     viewTab();
                                 });
                         });
@@ -213,7 +211,6 @@ function addEmp() {
 
                             db.promise().query('INSERT INTO employee (first_name, last_name, role_id, manager_id) values (?, ?, ?, ?)', [empFirst, empLast, roleID, managerID])
                                 .then(([data]) => {
-                                    selectEmps();
                                     viewTab();
                                 });
                         });
@@ -253,7 +250,6 @@ function empRoleUpdate() {
             .then(([data]) => {
                 db.promise().query('UPDATE employee SET role_id = (SELECT id FROM company_role WHERE title = ?) WHERE id = (SELECT id FROM(SELECT id FROM employee WHERE CONCAT (first_name, "", last_name) = ?) AS tmptable)',
                 [data.newRole, data.empl]);
-                selectEmps();
                 viewTab();
             })
     })
