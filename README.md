@@ -64,33 +64,11 @@ THEN I am prompted to select an employee to update and their new role and inform
 
 
 ## Packages Used for Application
+
 > 1. MySQL2 to connect to MySQL database and preform queries
 > 2. Inquirer to interact with user via the command-line
 > 3. console.table to print MySQL rows to the console
 
-> Additional package: express
-
-## Getting Started
-Schema.sql file should contain the following tables
-> - `department`
-        - `id: INT PRIMARY KEY`
-        - `name: VARCHAR(30)` to hold department title
-> - `role`
-        - `id: INT PRIMARY KEY`
-        - `title: VARCHAR(30)` to hold role title
-        - `salary: DECIMAL` to hold rolw salary
-        - `department_id: INT` to hold reference to department role belongs to
-> - `employee` 
-        - `id: INT PRIMARY KEY`
-        - `first_name: VARCHAR(30)` to hold employee first name
-        - `last_name: VARCHAR(30` to hold employee last name
-        - `role_id: INT` to hold reference to employee role
-        - `manager_id: INT` to hold reference to another employee that is the manager of the current employee (`null` if the employee has no manager)
-
-> - There will be a different file containing function for performing specific SQL queries
-
-> - Constructor function or class can be helpful in organizing functions
-> - A seeds-sql file can be used to pre-populate the database. This will make development of individual features much easier
 
 ## Usage
 
@@ -99,10 +77,47 @@ To run this application you will need to first download three packages:
 > 2. MySQL2 to run MySQL in the console
 > 3. console.table to show the tables within the database onto the console
 
-Next, follow these steps to launch MySQL in the command line
-> 1. Type `mysql -u root -p` to login to MySQL
+To run the application, type in `node server.js` into the command line
 
-> 2. Next, type in `show databases`. This will allow you to seek out the database you want to access
+There are a series of prompts that will ask you the following:
 
-> 3. Type in `USE database_name` (In this case it will be employee_db) so you can start using this database
+> 1. View All Departments
+> 2. View All Roles
+> 3. View All Employees
+> 4. Add Department
+> 5. Add Role
+> 6. Add Employee
+> 7. Update Employee Role
+> 8. quit
 
+When you select the view all opitons, then a table with information about the departments, roles, and employees in the company are shown.
+When the Add options are selected, then you can enter in a new department, new roles, and new employees to the database (within their respective tables)
+When the "Updata Employee Role" is selected, then you can update the role of any employee by searching for their name and changing their role. 
+
+
+The tables can be generated from mysql by typing in the following commands:
+
+> 1. mysql -u root -p (This will intialize mysql and ask for your password)
+> 2. source db/schema.sql (This will create a blank table from the schema.sql file)
+> 3. source db/seeds.sql (This will fill the tables with placeholder data from the seeds.sql file)
+> 4. show tables (This will show all tables in the database)
+> 5. SELECT * FROM department (This will show all the contents in the department table)
+> 6. SELECT * FROM company_role (This will show all the contents in the role table)
+> 7. SELECT * FROM employee (This will show all the contents in the employee table)
+
+
+## Video Demonstration
+Here is the link to the video demonstration of the employee tracker: https://drive.google.com/file/d/1cFvTX-6uDB4PkdCrKD4fGrjNAYfhYZBy/view
+
+#### disclaimers
+
+Ok....so there is a couple things about the tracker that aren't working fully right now (Currently trying to fix said issues)
+
+> 1. The prompt for updating the role of an employee is still going through a few patches at the moment
+
+> Also please note that you will need to enter your own password for the createConnection to connect mysql to the server.js file
+
+## Questions
+If you have any further questions, please contact me via
+> - Github: https://github.com/LawrenceSB24
+> - Email: lawrs22@gmail.com
