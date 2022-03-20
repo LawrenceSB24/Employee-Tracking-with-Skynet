@@ -234,7 +234,7 @@ function empRoleUpdate() {
             .prompt([
                 {
                     type: 'list',
-                    name: 'empFirst',
+                    name: 'first_name',
                     message: "Please choose an employee to update their role: ",
                     choices: emps
                 }
