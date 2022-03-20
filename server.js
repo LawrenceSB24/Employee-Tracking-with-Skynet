@@ -137,16 +137,16 @@ function roleAdd() {
 
             db.promise().query('SELECT * FROM department')
                 .then(([data]) => {
-                    const depts = data.map(({ id, title }) => ({
-                        name: title,
+                    const depts = data.map(({ id, name }) => ({
+                        name: name,
                         value: id
                     }))
 
                     inquirer.prompt([
 
                         {
-                            type: 'input',
-                            name: 'role_department',
+                            type: 'list',
+                            name: 'deptId',
                             message: 'Please state which department you want the role to be in: ',
                             choices: depts
                         }
@@ -224,34 +224,50 @@ function addEmp() {
 // Honestly not quite sure how to fix this portion so this will be part of the ice box for now
 // I do understand if this takes points off from the grade
 function empRoleUpdate() {
-    db.promise().query('SELECT CONCAT (first_name, "", last_name) AS full_name FROM employee; SELECT company_role.title FROM company_role')
+    db.promise().query('SELECT * FROM employee')
     .then(([data]) => {
+        const emps = data.map(({id, first_name}) => ({
+            name: first_name,
+            value: id
+        }))
         inquirer
             .prompt([
                 {
-                    name: 'employees',
                     type: 'list',
-                    choices: function () {
-                        let choiceArray = results[0].map(choice => choice.full_name);
-                        return choiceArray;
-                    },
-                    message: 'Please select which employee you wish to update their role: '
-                },
-                {
-                    name: 'newRole',
-                    type: 'list',
-                    choices: function () {
-                        let choiceArray = results[0].map(choice => choice.title);
-                        return choiceArray;
-                    }
+                    name: 'empFirst',
+                    message: "Please choose an employee to update their role: ",
+                    choices: emps
                 }
             ])
-    
-            .then(([data]) => {
-                db.promise().query('UPDATE employee SET role_id = (SELECT id FROM company_role WHERE title = ?) WHERE id = (SELECT id FROM(SELECT id FROM employee WHERE CONCAT (first_name, "", last_name) = ?) AS tmptable)',
-                [data.newRole, data.empl]);
-                viewTab();
+            .then(res => {
+                empId = res.id;
+                db.promise().query('SELECT * FROM company_role')
+                .then(([data]) => {
+                    const roles = data.map(({id, title}) => ({
+                        name: title,
+                        value: id
+                    }))
+                    inquirer
+                        .prompt([
+                            {
+                                type: 'list',
+                                name: 'role_id',
+                                message: 'Please choose a new role: ',
+                                choices: roles
+                            }
+                        ])
+                        .then(res => {
+                            title = res.role_id;
+                            console.log(emps);
+                            console.log(roles);
+                            console.log(title);
+                            console.log(empId);
+                            db.promise().query(`UPDATE employee SET role_id = ${title} WHERE id = ${empId}`)
+                            viewTab();
+                        })
+                })
             })
+
     })
 };
 
