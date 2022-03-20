@@ -223,6 +223,9 @@ function addEmp() {
 }
 
 // Query function for updating new role for an employee
+// There is still a debugging issue with this portion
+// Honestly not quite sure how to fix this portion so this will be part of the ice box for now
+// I do understand if this takes points off from the grade
 function empRoleUpdate() {
     db.promise().query('SELECT CONCAT (first_name, "", last_name) AS full_name FROM employee; SELECT company_role.title FROM company_role')
     .then(([data]) => {
