@@ -1,23 +1,72 @@
-// mysql2 package imported
-const mysql = require('mysql2');
-
 // Inquirer package imported
 const inquirer = require('inquirer');
 
 // console.table package imported
 require('console.table');
 
+// mysql2 package imported
+const mysql = require('mysql2');
 
 // Connection to database
 const db = mysql.createConnection(
     {
-        host: "localhost",
-        user: "root",
-        password: "",
-        database: "employee_db"
+        host: 'localhost',
+        user: 'root',
+        password: 'MySQLITY2525!',
+        database: 'employee_db'
     },
     console.log('Connection established!')
 );
+// Inquirer prompts for updating the list
+function viewTab() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            message: 'What would you like to do(?): ',
+            choices: [
+                'View All Departments',
+                'View All Roles',
+                'View All Employees',
+                'Add Department',
+                'Add Role',
+                'Add Employee',
+                'Update Employee Role',
+                'Done'
+            ],
+            name: 'menu'
+        }
+    ])
+        .then(function (res) {
+            switch (res.menu) {
+                case 'View All Departments':
+                    selectDep();
+                    break;
+                case 'View All Roles':
+                    selectRole();
+                    break;
+                case 'View All Employees':
+                    selectEmps();
+                    break;
+                case 'Add Department':
+                    deptAdd();
+                    break;
+                case 'Add Role':
+                    roleAdd();
+                    break;
+                case 'Add Employee':
+                    addEmp();
+                    break;
+                case 'Update Employee Role':
+                    empRoleUpdate();
+                    break;
+                case 'Done':
+                    return;
+            }
+        });
+        
+};
+
+viewTab();
 
 // Query function for listing all known departments
 // Listing roles and employee functions will have similar layout
@@ -59,10 +108,9 @@ function deptAdd() {
         ])
         .then(res => {
             let deptNew = res.dept_name;
-            db.promise().query('INSERT INTO department(name) WHERE values = ?', [deptNew])
+            db.promise().query('INSERT INTO department(name) values (?)', [deptNew])
                 .then(([data]) => {
                     selectDep();
-                    console.table(data);
                     viewTab();
                 });
         });
@@ -106,10 +154,9 @@ function roleAdd() {
                     ])
                         .then(res => {
                             departmentId = res.deptId
-                            db.query('INSERT INTO company_role(title, salary, department_id) WHERE values = (?, ?, ?)', [roleNewName, roleSalary, departmentId])
+                            db.promise().query('INSERT INTO company_role (title, salary, department_id) values (?, ?, ?)', [roleNewName, roleSalary, departmentId])
                                 .then(([data]) => {
                                     selectRole();
-                                    console.table(data);
                                     viewTab();
                                 });
                         });
@@ -164,10 +211,9 @@ function addEmp() {
                             roleID = res.roleID;
                             managerID = res.managerID;
 
-                            db.query('INSERT INTO employee(first_name, last_name, role_id, manager_id) WHERE values = (?, ?, ?, ?)', [empFirst, empLast, roleID, managerID])
+                            db.promise().query('INSERT INTO employee (first_name, last_name, role_id, manager_id) values (?, ?, ?, ?)', [empFirst, empLast, roleID, managerID])
                                 .then(([data]) => {
                                     selectEmps();
-                                    console.table(data);
                                     viewTab();
                                 });
                         });
@@ -178,38 +224,38 @@ function addEmp() {
 
 // Query function for updating new role for an employee
 function empRoleUpdate() {
-    db.promise().query('SELECT (employee.first_name, employee.last_name, employee.role_id) FROM employee', [roleID])
-        .then(([data]) => {
-            inquirer
-                .prompt([
-                    {
-                        type: 'input',
-                        name: 'empFirst',
-                        message: 'Please enter the FIRST name of the employee'
+    db.promise().query('SELECT CONCAT (first_name, "", last_name) AS full_name FROM employee; SELECT company_role.title FROM company_role')
+    .then(([data]) => {
+        inquirer
+            .prompt([
+                {
+                    name: 'employees',
+                    type: 'list',
+                    choices: function () {
+                        let choiceArray = results[0].map(choice => choice.full_name);
+                        return choiceArray;
                     },
-                    {
-                        type: 'input',
-                        name: 'empLast',
-                        message: 'Please enter the LAST name of the employee'
-                    },
-                    {
-                        type: 'input',
-                        name: 'newRoleID',
-                        message: 'What role do you want the employee to have(?): ',
-                        choices: roles
+                    message: 'Please select which employee you wish to update their role: '
+                },
+                {
+                    name: 'newRole',
+                    type: 'list',
+                    choices: function () {
+                        let choiceArray = results[0].map(choice => choice.title);
+                        return choiceArray;
                     }
-                ])
-                .then(res => {
-                    let newRoleID = res.newRoleID;
-                    db.query('INSERT INTO employee(roleID) WHERE values = ?', [empFirst, empLast, newRoleID, managerID])
-                        .then(([data]) => {
-                            selectRole();
-                            console.table(data);
-                            viewTab();
-                        });
-                });
-        });
+                }
+            ])
+    
+            .then(([data]) => {
+                db.promise().query('UPDATE employee SET role_id = (SELECT id FROM company_role WHERE title = ?) WHERE id = (SELECT id FROM(SELECT id FROM employee WHERE CONCAT (first_name, "", last_name) = ?) AS tmptable)',
+                [data.newRole, data.empl]);
+                selectEmps();
+                viewTab();
+            })
+    })
 };
+
 
 // TODO (Ice-box): Deleting A Department
 /**
@@ -274,51 +320,3 @@ function empRoleUpdate() {
  * }
  * 
 */
-
-
-// Inquirer prompts for updating the list
-function viewTab() {
-    inquirer.prompt([
-        {
-            type: 'list',
-            choices: [
-                'View Departments',
-                'View Roles',
-                'View All Employees',
-                'Add Department',
-                'Add Role',
-                'Add Employee',
-                'Update Employee Role',
-                'Done'
-            ],
-            name: 'menu'
-        }
-    ])
-        .then(userChoice => {
-            switch (userChoice.menu) {
-                case 'View All Departments':
-                    selectDep();
-                    break;
-                case 'View All Roles':
-                    selectRole();
-                    break;
-                case 'View All Employees':
-                    selectEmps();
-                    break;
-                case 'Add Department':
-                    deptAdd();
-                    break;
-                case 'Add Role':
-                    roleAdd();
-                    break;
-                case 'Add Employee':
-                    addEmp();
-                    break;
-                case 'Update Employee Role':
-                    empRoleUpdate();
-                    break;
-                case 'Done':
-                    return;
-            }
-        });
-};
